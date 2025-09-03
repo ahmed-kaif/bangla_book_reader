@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Conversion Status</h3>
+                    <p class="mb-0">{{ job.filename }}</p>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong> 
+                        <span class="badge bg-{% if job.status == 'completed' %}success{% elif job.status == 'failed' %}danger{% elif job.status == 'processing' %}primary{% else %}warning{% endif %}">
+                            {{ job.status.title() }}
+                        </span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Progress:</strong> <span id="progress-text">{{ job.progress }}%</span>
+                        <div class="progress">
+                            <div id="progress-bar" class="progress-bar progress-bar-striped{% if job.status == 'processing' %} progress-bar-animated{% endif %}" 
+                                 style="width: {{ job.progress }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="status-message">
+                        {% if job.status == 'completed' %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Conversion completed successfully! Your audiobook is ready.
+                            </div>
+                            <a href="/download/{{ job.id }}" class="btn btn-success btn-lg">
+                                <i class="fas fa-download me-2"></i>Download Audiobook
+                            </a>
+                        {% elif job.status == 'failed' %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Conversion failed: {{ job.error_message or "Unknown error" }}
+                            </div>
+                            <a href="/upload" class="btn btn-primary">Try Again</a>
+                        {% elif job.status == 'processing' %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-cog fa-spin me-2"></i>
+                                Converting your PDF to audiobook... Please wait.
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-clock me-2"></i>
+                                Your conversion is queued and will start shortly.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-3">
+                <a href="/jobs" class="btn btn-outline-primary">
+                    <i class="fas fa-list me-2"></i>View All Jobs
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if job.status in ['pending', 'processing'] %}
+<script>
+function updateProgress() {
+    fetch('/api/job/{{ job.id }}/progress')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('progress-text').textContent = data.progress + '%';
+            document.getElementById('progress-bar').style.width = data.progress + '%';
+            
+            if (data.completed || data.failed) {
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Update every 2 seconds
+setInterval(updateProgress, 2000);
+</script>
+{% endif %}
+{% endblock %}

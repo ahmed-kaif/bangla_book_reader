@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero text-center">
+    <div class="container">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-book-reader me-3"></i>Bengali PDF to Audiobook
+        </h1>
+        <p class="lead mb-4">Convert your Bengali PDF books into audiobooks instantly!</p>
+        <a href="/upload" class="btn btn-light btn-lg">
+            <i class="fas fa-upload me-2"></i>Start Converting Now
+        </a>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-language feature-icon"></i>
+                <h5>Bengali Support</h5>
+                <p>Full Bengali text processing and natural speech synthesis.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-cloud feature-icon"></i>
+                <h5>Web-Based</h5>
+                <p>No software installation required. Works in any browser!</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <i class="fas fa-download feature-icon"></i>
+                <h5>Easy Download</h5>
+                <p>Get your audiobook as MP3 file ready for any device.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2>How It Works</h2>
+        <div class="row mt-4">
+            <div class="col-md-3 mb-3">
+                <div class="h2 text-primary">1</div>
+                <h6>Upload PDF</h6>
+                <p>Choose your Bengali PDF file</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="h2 text-primary">2</div>
+                <h6>Processing</h6>
+                <p>We extract and process the text</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="h2 text-primary">3</div>
+                <h6>Audio Generation</h6>
+                <p>Convert text to natural speech</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="h2 text-primary">4</div>
+                <h6>Download</h6>
+                <p>Get your audiobook MP3 file</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2><i class="fas fa-list me-2"></i>Conversion History</h2>
+    
+    {% if jobs %}
+        {% for job in jobs %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="card-title">{{ job.filename }}</h5>
+                        <p class="text-muted mb-1">Job ID: {{ job.id }}</p>
+                        <small class="text-muted">Created: {{ "%.0f"|format(job.created_at) | int | timestamp_to_date }}</small>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="badge bg-{% if job.status == 'completed' %}success{% elif job.status == 'failed' %}danger{% elif job.status == 'processing' %}primary{% else %}warning{% endif %}">
+                            {{ job.status.title() }}
+                        </span>
+                        <div class="progress mt-1" style="height: 5px;">
+                            <div class="progress-bar" style="width: {{ job.progress }}%"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <a href="/job/{{ job.id }}" class="btn btn-outline-primary btn-sm">Details</a>
+                        {% if job.status == 'completed' %}
+                            <a href="/download/{{ job.id }}" class="btn btn-success btn-sm">Download</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-file-pdf fa-3x text-muted mb-3"></i>
+            <h4>No conversions yet</h4>
+            <p>Upload your first Bengali PDF to get started!</p>
+            <a href="/upload" class="btn btn-primary btn-lg">
+                <i class="fas fa-upload me-2"></i>Upload PDF
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
